@@ -1,0 +1,444 @@
+OPENLOG
+
+
+Status of This Memo
+
+	Similar to the Network Working Group Request for Comments (RFC)
+	this document specifies an Internet Best Current Practices for the
+	Internet Community, and requests discussion and suggestions for
+	improvements. Currently the authors have no intention
+	to make this an official BCP or RFC. Distribution of this memo is
+	possible and welcome under the GNU FDL 1.3 license. The full
+	license accompanies this document and can be found at:
+
+	http://www.gnu.org/licenses/fdl-1.3
+
+	Openlog software possibly distributed along with this document
+	is licensensed under the GNU GPL 3.0 license.
+
+
+Copyright Notice
+
+	This document is
+	Copyright (c) 2012-2013 Openlog Initiative.
+	Licensed under GNU FDL 1.3.
+
+
+Abstract
+
+	Openlog is a set of assumptions, standards, recommendations for
+	best practice and offers an example implementation of a protocol
+	and a web application which makes use of the above for a facility
+	that enables a user to keep track of personal events over a period
+	of time in a structured, machine-readable/-exchangeable manner.
+
+	Keywords: log,event,time-line,chronicle,graph,path,diary,traces,
+	chronic,journal,productivity-tool, lifestreaming, digital-traces,
+	federated-identity, activity-stream
+
+
+Table of Contents
+
+	1. Introduction
+	2. Elements & Concepts
+	3. Related efforts
+
+
+1. Introduction
+
+	Over the course of a lifetime, people actively do things or 
+	passively experience things in interaction with other people,
+	corporations, services, artistic works or any other agglomerate
+	that may find materialisation as physical object or abstract
+	intellectual property.
+
+	These interactions as events form a multidimensional graph that
+	describes the activities of the graphing person in time and space.
+
+	Commonly, these interactions occur with someone or something,
+	somewhere, interactions start at a specific time and end at a
+	specific time that in sum implicates the events duration. Besides
+	these basic cornerstones, an event or activity may have any number
+	of arbitrary attributes.
+	Whether we speak of events or activities has yet to be decided upon.
+
+	The Openlog Initiative is about finding best practives for the
+	recording of chronologic personal data in a machine-readable,
+	structured format.
+
+	The collected event/activity data, hopefully undirected in its raw
+	form can then be processed, filtered and interlinked to form reports
+	or visualisations giving a user insight into the data under a certain
+	perspective. Examples for such reports would be the serial
+	presentation of such data in the form of multi-linear horizontal or 
+	vertical timelines or directed graphs of n-dimensions. At this point,
+	the arbitrary nature of attributes should enable a manual user or
+	automated service to form relationships between events/activities
+	that represent subsets of the underlying data that results in a
+	meaningful filtered report under a certain perspective.
+
+	All of that isn't exactly new. Mankind has recorded history in a
+	manifold fashion probably ever since. Carved into the stone walls
+	of caves, written down on papyrus by chroniclers, "logged" into
+	an official logbook or secretly noted into a personal diary. Even
+	unknowingly any event in the universe leaves traces behind, on
+	cosmic scale or on microscopic scale, actively or passively - traces
+	that directly or indirectly document the past through derrivative
+	artifacts.
+
+	That given, the idea of openlog is to equip a user or developer
+	with a number of definitions, concepts and tools use- and helpful
+	when building applications upon. A set of building stones that helps
+	transport the idea of "keeping record" into the digital age, that
+	enables stationary and mobile users likewise to note down history,
+	even though it may be a very personal one.
+
+
+	Due to the universal nature of the ideas presented, it should be
+	noted that the authors can't be sure that some or even all of the
+	document at hand is either trivial, unhelpful or both.
+
+
+2. Elements & Concepts
+
+	2.1 Events/Activities/Things/Episodes
+
+	Speaking of "things" isn't very specific, but the beauty of it is, that
+	this term keeps the whole idea simple. When we dive into the problem of
+	differentiating between "things" that might go on while others are more a
+	kind of snapshot, it may make sense to speak of events and activities, where
+	events are the granular elements that make up an activity which spans a time
+	period.
+
+	For example, if you are playing a game, this is an activity. Short blurps of
+	achieved high-scores or in-game achievements then are events.
+	Or a more wholistic example is that "living" is an actvity while biomedical
+	snapshots like heartrate, blood-pressure or body temperature are events, 
+	events of a measurement. In a way, events imply a before and an after. Birth
+	is an event that implies the activity living. Heart failure is synonymous
+	with death and implies that the activity "living" has come to an end.
+
+	Summing this up, it seems that events actually imply activities. If we apply
+	this insight to the above gaming example, the sum of gaming related events forms
+	a group of events that form the activity "gaming". Where the events "starting to 
+	play" and "stopping to play" mark the start and end points of the "activity".
+	That given, it might make sense to discard "activities" altogether on the data
+	collection part, resorting to computing the bracketing "activities" when the 
+	data is processed.
+
+	Implementation still has to show what approach turns out to be more practical
+	on the data processing side, keeping our data blurps as undecided "things" or
+	if we differentiate between logged events and activities. It looks as if
+	differentiating would mean mixing hierarchically different data in a flattened
+	data model.
+
+
+	2.2 Places
+
+	What kind of event should I log? Something I am doing *at* a place or that I
+	enter a place, as my action? Some services tend to suggest that entering a
+	place is the event we should log, for example you are "checking-in" somewhere.
+	Other services go more into a direction that is encouraged in our context, as
+	they speak of "tagging" someone, somewhere, this way suggesting that the place
+	is a kind of supplemental metadata. That this is a good way to handle places
+	becomes clearer when we think about time as supplemental data. We naturally
+	assume that events take place sometime. Similarly, we should assume that events
+	take place somewhere. Thus, openlog encourages users to think about *what* they
+	are doing and then logging the place as supplemental information. Users should
+	not log events as if the core information would be the place.
+
+
+	2.3 Activities that encompass a number of sub events
+
+	Imagine you want to keep log of your bi-daily jogging workout. Such an activity
+	usually involves a number of subevents like waypoints, biomedical readings and
+	descriptive text. We need to find a way to bracket together this set of events
+	to reduce clutter when presenting this data to the user.
+
+	The same is true for travelling.
+
+	As it seems, these activities have a strong location-related uniqueness.
+	Possibly, we can handle this by stressing the assumption that more or less
+	place/location is a constant stream instead of a singular event. As such, the
+	whole corpus of event data in an openlog data could be expressed as one single
+	graph of waypoints, or one single path, with smaller sections of this pass being
+	the "background" for events that may lie on its way. Possibly, we have to treat
+	location more like time with marks along the way we'd like to highlight by
+	adding a specific event. Possibly the same is true for events at all.
+
+
+	2.4 Attributes/Key-Value-paris/values
+
+	One of the challenges of logging activity arises when multiple things happen
+	at once, in parallel. Thus we need to find a away to mark if another activity
+	is still ongoing while another new event happens. For example you can still
+	watch TV while you start browsing the internet.
+
+	The most primitive approach would be to assume that people or activites are
+	strictly serial. In such a logic, one new event would end the preceding one.
+	But people aren't serial, depending on activity, people can be multi-tasking.
+
+	A more advanced solution would be to mark activities as "open" or "ongoing"
+	or implicitely marking one event as such by not giving it an end timestamp.
+	But that would quickly add up to a large number of ongoing activities. For
+	example, the openlog system would constantly remind you that you are still
+	in your hometown, are still born/living, and on and on. Also, systems that
+	require a user to manually close "things" tend to suffer from forgotten or
+	left over "open" objects.
+
+	The most promising approach here seems to be a semi-automatic, or mixed
+	approach. The idea is that we define some attributes as being "binary". For
+	example the "what" attribute has the potential to contain activities that may
+	go on parallel, while the "where" attribute usually is mutually exclusive. You
+	can't be in two places at once. So when a first event occurs "at home" and the 
+	following event then happens "down town", we can automatically declare the
+	status "I'm at home" as being done.
+
+	The semi-automatic approach would allow us to have "incomplete" events, where
+	a null value implicates that the value is unchanged from the previous event.
+
+	Requiring the user to log only complete sets of attributes would allow us
+	to deduct that some attributes automatically, for example when a value is
+	the same as on the previous logged object. But this again would mean giving
+	the openlog priciples a serial notion, where parallel events are hard to log,
+	as trailing ends become difficult to render this way.
+
+	We still have to work out how we treat attributes that require the user to
+	tell the system if the new event closes a preceeding one.
+
+
+	2.5 Automagic helpers
+
+	A world model, or helper logic has to be defined in such a way that the
+	application can help us automatically open/close binary states such as the
+	aforementioned personal location, or moderate implicit assumtions like
+	are we awake or asleep, which is mentioned below.
+
+
+	2.5.1 timestamp/start_time/epoch/time
+
+
+	2.6 the "log"/the raw data/the whole/the collection/the repository
+
+
+	2.7 Ratings
+
+	Research (cp. Daniel Kahnemann's work) has shown that our episodic memory, after
+	our mind declares an episode as finished, labels these episodes with a feeling,
+	remembers whether it was a good or a bad experience. As such, the proposed
+	system should offer a facility that enables the user to rate events.
+
+	Further, these ratings must not be connected to an atomic object, such as a
+	singular movie, music track or similar entities. This is modeled after how we
+	experience life, things we like in one situation might not be as pleasant in
+	another. So if the event data including the ratings is to be used to render
+	ratings for a specific object, this data can only be extracted by averaging
+	all the given ratings for a singular object.
+
+
+	2.8 Implicit assumptions about the human condition
+
+	One implicit assumption is that you can only do a certain subset of events while
+	being awake. This implies an activity we can define as "being awake". So a common
+	activity "Going to sleep" or "Going to bed" actually is the end-time of the
+	episode "being awake".
+
+	This idea points us into the direction that we probably should present the
+	user with a menu of ongoing activities, in case an event the user is about
+	to log is actually the termination of an already as on-going logged event.
+
+	For episodes such as this one, it might make sense that openlog automagical
+	triggers events. For example, when you log "making breakfast" or any other
+	event from the set of activities that require "being awake", it also triggers
+	the start of the implicit event "I am awake", that being the episode, or
+	event, the user later that day can declare as over by stating "Going to sleep".
+
+	Further, it might make sense to assume that if not declared otherwise, an event
+	is always of the subset of events that require "being awake". Only a very
+	limited number of events can be expected to come from the the other group,
+	like biomedical readings that could be logged automatically while being asleep.
+
+
+3. Structure
+
+	Openlog events are blobs of structured, machine-readable data.
+	The collected data more or less represents a DAG, a directed
+	acyclic graph of events or objects.
+
+	Each event is represented by a generic data object, merely a collection of
+	arbitrary key value pairs that by definition don't have to follow a specific
+	form. The only mandatory parameters are a unique id and an epoch field. Ids may
+	be numerically ascending, but are not necessarily inserted into the database in
+	chonologic sequence thus the need for a timestamp field. For openlog, the 
+	timestamp field is called epoch, containing a numeric value, seconds since the
+	UNIX epoch.
+
+	In order to present the data objects in a human readable fashion to the user,
+	openlog uses a number of data templates (or renderers) which, once applied to
+	the data object, tell openlog how to display the data contained in the object in
+	a meaningful, possibly truncated, shortened or less detailed view, for the user.
+
+
+4. Integrity
+
+	3.1 Optional fraud prevention
+
+	Some yet to be developed scheme that continuously hashes contents of the log
+	or calculates sums that give an idea about the integrity of the whole account
+	at a given point in time. A scheme that makes tampering with the data or
+	commiting fraud in the form of modification of already logged events impossible.
+
+	To faciliate this, openlog compatible applications may offer some method tamper
+	prevention. One option would be an implementation of forward hashing, where the
+	next hash always includes the preceeding ones. Further, each hash might be
+	timestamp-signed from a trusted source or committed with a time-stamped GPG key
+	to lift the level of integrity. This way, applications could build a solid
+	unforgeable event repository. 
+
+
+5. Privacy
+
+	Openlog strives to offer rules or best practive recommendations for developers
+	so that openlog users have options to decide about the privacy of the data as
+	a whole, the privacy of elements and the share of public status of elements or
+	the data as whole.
+
+
+6. Data sources
+
+	6.1 Media players
+
+	Media players have proven to be a well working source to trigger a service
+	that collects and documents playback events. We should strive to achieve
+	compatibility with the Audioscrobber protocol in programmatic implementations
+	of the openlog standard. An added pass-through facility may be helpful when
+	users want to record data to openlog and to Audioscrobbler compatible servers.
+
+	Also see "Related efforts" below.
+
+
+	6.2 Electronic calendars
+
+	Electronic calendars are a convenient way to organize personal and
+	professional life. Yet, despite numerous efforts to standardise how we
+	treat calendar data, one recurring question remains mostly unanswered: what
+	do we do with calendar entries that have passed? iCal-based calendars or
+	any other digital calendar, weather mobile or stationary, progressively
+	clutter with old reminders, dates, notes and need to be cleanesed by hand. 
+	Through bulk data imports or via Add-Ons or Plug-Ins we could save these
+	"marks in time" to augment our repository of past events.
+	We could move this data into openlog to document what happend. A digital
+	replacement for keeping old paper calendars that so many people use as a
+	surrogate diary.
+
+
+	6.3 Federation
+
+	One central piece in interconnected applications is the notion of data
+	federation. Openlog applications must lay sharp focus on facilities
+	that enable them to to act as a core service for a user, sending
+	activities out to subsequent services, as well as the other way round,
+	where openlog is a consumer of data originating from other sources.
+
+
+	6.3 Operating system
+
+	The GNOME desktop project curates the zeitgeist-engine project, an activity
+	log process running in the background, that records user actions, tracks
+	opened files, visited websites, etc. This service's UI, now called the GNOME
+	Activity Journal, enables a user to browse, review and edit past activity on
+	a specific machine.
+
+	Openlog could tap into this data repository, and in case openlog runs on an
+	external machine, could be used to collect zeitgeist data from multiple
+	machines.
+
+	Also see "Related efforts" below.
+
+
+	6.4 Personal trackers
+
+	Step counters health monitors, GPS trackers, etc
+
+
+7. Related efforts
+
+	Elements in this paragraph may refer to registered trademarks, unregistered
+	trademarks or servicemarks. The authors claim no ownership of such and state
+	that all rights related to these marks belong to their respective owners. 
+	Mention of these marks herein is for completeness of the account only.
+
+
+	7.1 Scrobbling
+
+	Audioscrobbler is a service which merged with last.fm in 2005, enabling
+	a user to report a played music track to a central webservice. Music players
+	via API automatically "scrobble" or ping the audioscrobbler service. In turn
+	the last.fm website enables the user to keep track of played back music, 
+	building a profile of personal taste along the way that might help the user
+	to discover related or similarly interesting music.
+
+	getglue.com, tracks movies, music and entrtainment you watch (getglue.com/api)
+	trakt.tv, tracks movies and tv-shows you watch (trakt.tv/api-docs)
+
+
+	7.2 Opengraph
+
+	The social networking site facebook, besides interlinking people by enabling
+	them to define relationships between each other in varying degrees of 
+	friendship has branched out into collecting a user's life data and
+	artifacts like photos and real-world traces ("check-ins"). As this direction
+	of facebook's operations intensified, it was decided to open up the underlying
+	system to developers, naming the framework opengraph. The common public
+	interface of this underlying framework is the interface redesign named Timeline
+	that organizes a user's activities and shares on facebook into a vertically
+	arranged chronological order.
+
+
+	7.3 Closed gaming networks
+
+	The Sony Playstation Network, Microsoft's XBOX Live, Valve Corporation's Steam
+	Community and many smaller game community hubs enable users to publish their
+	personal game library, their achievements per game and real-time activities
+	like what they are playing or newest high scores achieved.
+
+
+	7.4 Blogs
+
+	Blogs, when used as a diary, resemble a traditional paper diary very closely.
+	Still, openlog is different as it focuses on collecting structured, machine-
+	processable data whereas a blog is traditionally, and due to the number of
+	different blog engines, more of a freeform medium.
+
+
+	7.5 GNOME Activity Journal (formerly GNOME Zeitgeist)
+
+	The Zeitgeist engine is very focused on collecting activity on a computer.
+	Openlog extents this to enabling the user to collect generic data, not
+	limiting whether it originated from activity on an electronic device
+	or from activity not related to electronic devices in any way.
+
+	
+	7.6 Activity Streams
+
+	Activity Streams, similar to openlog, strive to define data blobs that represent
+	activities. One central difference is that it proposes a simple syntax centering
+	around "verbs". It has yet to be decided, while technically implementing openlog
+	example applications, iff this approach is superior to the current openlog "what
+	where when" scheme plus "categories".
+
+
+	7.7 Lifestreaming
+
+	http://en.wikipedia.org/wiki/Lifestreaming
+
+
+	7.8 Digital traces
+
+	http://en.wikipedia.org/wiki/Digital_traces
+
+
+	7.9 Tent
+
+	"Tent is a protocol for decentralized social networking." with tentd being the
+	reference server implementation. Like SMTP for social activities.
